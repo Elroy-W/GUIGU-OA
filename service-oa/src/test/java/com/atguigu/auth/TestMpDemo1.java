@@ -60,7 +60,7 @@ public class TestMpDemo1 {
     }
     //条件查询
     @Test
-    public  void testQuery1(){
+    public void testQuery1(){
         //  创建QueryWrapper对象，调用方法封装条件
         QueryWrapper<SysRole> wrapper= new QueryWrapper<>();
         wrapper.eq("role_name","总经理");
@@ -69,7 +69,7 @@ public class TestMpDemo1 {
         System.out.println(list);
     }
     @Test
-    public  void testQuery2(){
+    public void testQuery2(){
         //  创建QueryWrapper对象，调用方法封装条件
         LambdaQueryWrapper<SysRole> wrapper=new LambdaQueryWrapper<>();
         wrapper.eq(SysRole::getRoleName,"总经理");

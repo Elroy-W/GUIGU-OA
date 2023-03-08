@@ -1,6 +1,7 @@
 package com.atguigu.auth.controller;
 
 import com.atguigu.auth.service.SysRoleService;
+import com.atguigu.common.config.exception.GuiguException;
 import com.atguigu.common.result.Result;
 import com.atguigu.model.system.SysRole;
 import com.atguigu.vo.system.SysRoleQueryVo;
@@ -38,6 +39,14 @@ public class SysRoleController {
     @GetMapping("findAll")
     public Result<List<SysRole>> findAll() {
         List<SysRole> roleList = sysRoleService.list();
+
+        //异常模拟
+//        try{
+//            int a=10/0;
+//        }catch(Exception e){
+//            throw new GuiguException(200001,"执行了自定义异常");
+//        }
+
         return Result.ok(roleList);
     }
 

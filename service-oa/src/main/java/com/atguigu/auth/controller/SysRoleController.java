@@ -1,10 +1,9 @@
 package com.atguigu.auth.controller;
 
 import com.atguigu.auth.service.SysRoleService;
-import com.atguigu.common.config.exception.GuiguException;
 import com.atguigu.common.result.Result;
 import com.atguigu.model.system.SysRole;
-import com.atguigu.vo.system.AssginRoleVo;
+import com.atguigu.vo.system.AssignRoleVo;
 import com.atguigu.vo.system.SysRoleQueryVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -44,8 +43,8 @@ public Result toAssign(@PathVariable Long userId) {
 
     @ApiOperation(value = "根据用户分配角色")
     @PostMapping("/doAssign")
-    public Result doAssign(@RequestBody AssginRoleVo assginRoleVo) {
-        sysRoleService.doAssign(assginRoleVo);
+    public Result doAssign(@RequestBody AssignRoleVo assignRoleVo) {
+        sysRoleService.doAssign(assignRoleVo);
         return Result.ok();
     }
     //查询所有角色

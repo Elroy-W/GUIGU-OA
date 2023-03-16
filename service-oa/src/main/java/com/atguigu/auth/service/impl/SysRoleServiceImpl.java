@@ -5,7 +5,7 @@ import com.atguigu.auth.service.SysRoleService;
 import com.atguigu.auth.service.SysUserRoleService;
 import com.atguigu.model.system.SysRole;
 import com.atguigu.model.system.SysUserRole;
-import com.atguigu.vo.system.AssginRoleVo;
+import com.atguigu.vo.system.AssignRoleVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,20 +50,20 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Transactional
     @Override
-    public void doAssign(AssginRoleVo assginRoleVo) {
+    public void doAssign(AssignRoleVo assignRoleVo) {
         //把之前分配的角色删除
         LambdaQueryWrapper<SysUserRole> wrapper=new LambdaQueryWrapper<>();
-        wrapper.eq(SysUserRole::getUserId,assginRoleVo.getUserId());
+        wrapper.eq(SysUserRole::getUserId, assignRoleVo.getUserId());
         sysUserRoleService.remove(wrapper);
 
         //重新进行分配
-        List<Long> roleIdList = assginRoleVo.getRoleIdList();
+        List<Long> roleIdList = assignRoleVo.getRoleIdList();
         for(Long roleId:roleIdList){
             if(StringUtils.isEmpty(roleId)){
                 continue;
             }
             SysUserRole userRole = new SysUserRole();
-            userRole.setUserId(assginRoleVo.getUserId());
+            userRole.setUserId(assignRoleVo.getUserId());
             userRole.setRoleId(roleId);
             sysUserRoleService.save(userRole);
         }

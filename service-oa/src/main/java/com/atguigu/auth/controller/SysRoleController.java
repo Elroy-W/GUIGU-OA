@@ -43,6 +43,7 @@ public Result toAssign(@PathVariable Long userId) {
     return Result.ok(roleMap);
 }
 
+    @PreAuthorize("hasAuthority('bnt.sysUser.assignRole')")
     @ApiOperation(value = "根据用户分配角色")
     @PostMapping("/doAssign")
     public Result doAssign(@RequestBody AssignRoleVo assignRoleVo) {
@@ -50,6 +51,7 @@ public Result toAssign(@PathVariable Long userId) {
         return Result.ok();
     }
     //查询所有角色
+
 
     @ApiOperation(value = "获取全部角色列表")
     @GetMapping("findAll")

@@ -37,7 +37,7 @@ public class ProcessTemplateController {
     @Autowired
     private ProcessTemplateService processTemplateService;
 
-    //@PreAuthorize("hasAuthority('bnt.processTemplate.list')")
+    @PreAuthorize("hasAuthority('bnt.processTemplate.list')")
     @ApiOperation(value = "获取分页列表")
     @GetMapping("{page}/{limit}")
     public Result index(
@@ -51,7 +51,7 @@ public class ProcessTemplateController {
         return Result.ok(pageModel);
     }
 
-    //@PreAuthorize("hasAuthority('bnt.processTemplate.list')")
+    @PreAuthorize("hasAuthority('bnt.processTemplate.list')")
     @ApiOperation(value = "获取")
     @GetMapping("get/{id}")
     public Result get(@PathVariable Long id) {
@@ -59,7 +59,7 @@ public class ProcessTemplateController {
         return Result.ok(processTemplate);
     }
 
-    //@PreAuthorize("hasAuthority('bnt.processTemplate.templateSet')")
+    @PreAuthorize("hasAuthority('bnt.processTemplate.templateSet')")
     @ApiOperation(value = "新增")
     @PostMapping("save")
     public Result save(@RequestBody ProcessTemplate processTemplate) {
@@ -67,7 +67,7 @@ public class ProcessTemplateController {
         return Result.ok();
     }
 
-    //@PreAuthorize("hasAuthority('bnt.processTemplate.templateSet')")
+    @PreAuthorize("hasAuthority('bnt.processTemplate.templateSet')")
     @ApiOperation(value = "修改")
     @PutMapping("update")
     public Result updateById(@RequestBody ProcessTemplate processTemplate) {
@@ -75,14 +75,14 @@ public class ProcessTemplateController {
         return Result.ok();
     }
 
-    //@PreAuthorize("hasAuthority('bnt.processTemplate.remove')")
+    @PreAuthorize("hasAuthority('bnt.processTemplate.remove')")
     @ApiOperation(value = "删除")
     @DeleteMapping("remove/{id}")
     public Result remove(@PathVariable Long id) {
         processTemplateService.removeById(id);
         return Result.ok();
     }
-//    @PreAuthorize("hasAuthority('bnt.processTemplate.templateSet')")
+    @PreAuthorize("hasAuthority('bnt.processTemplate.templateSet')")
     @ApiOperation(value = "上传流程定义")
     @PostMapping("/uploadProcessDefinition")
     public Result uploadProcessDefinition(MultipartFile file) throws FileNotFoundException {
@@ -111,7 +111,8 @@ public class ProcessTemplateController {
         map.put("processDefinitionKey", fileName.substring(0, fileName.lastIndexOf(".")));
         return Result.ok(map);
     }
-//    @PreAuthorize("hasAuthority('bnt.processTemplate.publish')")
+
+    @PreAuthorize("hasAuthority('bnt.processTemplate.publish')")
     @ApiOperation(value = "发布")
     @GetMapping("/publish/{id}")
     public Result publish(@PathVariable Long id) {

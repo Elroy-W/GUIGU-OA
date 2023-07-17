@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan(basePackages = {"com.atguigu.auth.mapper","com.atguigu.process.mapper"})
+@MapperScan(basePackages = {"com.atguigu.auth.mapper","com.atguigu.process.mapper","com.atguigu.wechat.mapper"})
 public class MybatisPlusConfig {
 
     /**

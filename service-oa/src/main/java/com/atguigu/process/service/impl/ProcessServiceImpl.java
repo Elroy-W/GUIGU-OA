@@ -16,6 +16,7 @@ import com.atguigu.vo.process.ApprovalVo;
 import com.atguigu.vo.process.ProcessFormVo;
 import com.atguigu.vo.process.ProcessQueryVo;
 import com.atguigu.vo.process.ProcessVo;
+import com.atguigu.wechat.service.MessageService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -76,6 +77,9 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
 
     @Autowired
     private HistoryService historyService;
+
+    @Autowired
+    private MessageService messageService;
 
     @Override
     public IPage<ProcessVo> selectPage(Page<ProcessVo> pageParam, ProcessQueryVo processQueryVo) {
@@ -142,6 +146,7 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
                 assigneeList.add(user.getName());
 
                 //推送消息给下一个审批人，后续完善
+                messageService.pushPendingMessage(process.getId(), sysUser.getId(), task.getId());
             }
             process.setDescription("等待" + StringUtils.join(assigneeList.toArray(), ",") + "审批");
         }
@@ -265,6 +270,7 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
                 assigneeList.add(sysUser.getName());
 
                 //推送消息给下一个审批人
+                messageService.pushPendingMessage(process.getId(), sysUser.getId(), task.getId());
             }
             process.setDescription("等待" + StringUtils.join(assigneeList.toArray(), ",") + "审批");
             process.setStatus(1);

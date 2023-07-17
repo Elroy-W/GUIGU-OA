@@ -55,7 +55,7 @@ public class JwtHelper {
 
     //测试方法
     public static void main(String[] args) {
-        String token = JwtHelper.createToken(1L, "LUCY");
+        String token = JwtHelper.createToken(7L, "zhang3");
         System.out.println(token);
         System.out.println(JwtHelper.getUserId(token));
         System.out.println(JwtHelper.getUsername(token));

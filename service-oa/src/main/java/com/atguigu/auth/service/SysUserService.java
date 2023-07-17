@@ -25,4 +25,6 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     Map<String, Object> getUserInfo(String username);
+
+    Map<String, Object> getCurrentUser();
 }

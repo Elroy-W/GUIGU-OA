@@ -1,5 +1,6 @@
 package com.atguigu.process.controller.api;
 
+import com.atguigu.auth.service.SysUserService;
 import com.atguigu.common.result.Result;
 import com.atguigu.model.process.Process;
 import com.atguigu.model.process.ProcessTemplate;
@@ -8,6 +9,7 @@ import com.atguigu.process.service.ProcessTemplateService;
 import com.atguigu.process.service.ProcessTypeService;
 import com.atguigu.vo.process.ApprovalVo;
 import com.atguigu.vo.process.ProcessFormVo;
+import com.atguigu.vo.process.ProcessVo;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,6 +40,10 @@ public class ProcessApiController {
 
     @Autowired
     private ProcessService processService;
+
+    @Autowired
+    private SysUserService sysUserService;
+
     @ApiOperation(value = "待处理")
     @GetMapping("/findPending/{page}/{limit}")
     public Result findPending(
@@ -79,5 +85,30 @@ public class ProcessApiController {
         processService.approve(approvalVo);
         return Result.ok();
     }
+    @ApiOperation(value = "已处理")
+    @GetMapping("/findProcessed/{page}/{limit}")
+    public Result findProcessed(
+            @ApiParam(name = "page", value = "当前页码", required = true)
+            @PathVariable Long page,
+            @ApiParam(name = "limit", value = "每页记录数", required = true)
+            @PathVariable Long limit) {
+        Page<Process> pageParam = new Page<>(page, limit);
+        return Result.ok(processService.findProcessed(pageParam));
+    }
+    @ApiOperation(value = "已发起")
+    @GetMapping("/findStarted/{page}/{limit}")
+    public Result findStarted(
+            @ApiParam(name = "page", value = "当前页码", required = true)
+            @PathVariable Long page,
 
+            @ApiParam(name = "limit", value = "每页记录数", required = true)
+            @PathVariable Long limit) {
+        Page<ProcessVo> pageParam = new Page<>(page, limit);
+        return Result.ok(processService.findStarted(pageParam));
+    }
+    @ApiOperation(value = "获取当前用户基本信息")
+    @GetMapping("getCurrentUser")
+    public Result getCurrentUser() {
+        return Result.ok(sysUserService.getCurrentUser());
+    }
 }

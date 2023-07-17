@@ -29,6 +29,10 @@ public interface ProcessService extends IService<Process> {
 
     IPage<ProcessVo> findPending(Page<Process> pageParam);
 
+    IPage<ProcessVo> findProcessed(Page<Process> pageParam);
+
+    IPage<ProcessVo> findStarted(Page<ProcessVo> pageParam);
+
     Map<String, Object> show(Long id);
 
     void approve(ApprovalVo approvalVo);

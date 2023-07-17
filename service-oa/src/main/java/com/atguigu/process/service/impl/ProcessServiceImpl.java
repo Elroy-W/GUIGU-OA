@@ -25,9 +25,12 @@ import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.EndEvent;
 import org.activiti.bpmn.model.FlowNode;
 import org.activiti.bpmn.model.SequenceFlow;
+import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -70,6 +73,9 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
 
     @Autowired
     private ProcessRecordService processRecordService;
+
+    @Autowired
+    private HistoryService historyService;
 
     @Override
     public IPage<ProcessVo> selectPage(Page<ProcessVo> pageParam, ProcessQueryVo processQueryVo) {
@@ -171,6 +177,41 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
         }
         IPage<ProcessVo> page = new Page<ProcessVo>(pageParam.getCurrent(), pageParam.getSize(), totalCount);
         page.setRecords(processList);
+        return page;
+    }
+
+    @Override
+    public IPage<ProcessVo> findProcessed(Page<Process> pageParam) {
+        HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskAssignee(LoginUserInfoHelper.getUsername()).finished().orderByTaskCreateTime().desc();
+
+        List<HistoricTaskInstance> list = query.listPage((int) ((pageParam.getCurrent() - 1) * pageParam.getSize()), (int) pageParam.getSize());
+        long totalCount = query.count();
+
+        List<ProcessVo> processList = new ArrayList<>();
+        for (HistoricTaskInstance item : list){
+            String processInstanceId = item.getProcessInstanceId();
+            LambdaQueryWrapper<Process> wrapper=new LambdaQueryWrapper<>();
+            wrapper.eq(Process::getProcessInstanceId,processInstanceId);
+            Process process = baseMapper.selectOne(wrapper);
+
+            ProcessVo processVo=new ProcessVo();
+            BeanUtils.copyProperties(process,processVo);
+
+            processList.add(processVo);
+        }
+        IPage<ProcessVo> page = new Page<ProcessVo>(pageParam.getCurrent(), pageParam.getSize(), totalCount);
+        page.setRecords(processList);
+        return page;
+    }
+
+    @Override
+    public IPage<ProcessVo> findStarted(Page<ProcessVo> pageParam) {
+        ProcessQueryVo processQueryVo = new ProcessQueryVo();
+        processQueryVo.setUserId(LoginUserInfoHelper.getUserId());
+        IPage<ProcessVo> page = processMapper.selectPage(pageParam, processQueryVo);
+        for (ProcessVo item : page.getRecords()) {
+            item.setTaskId("0");
+        }
         return page;
     }
 
